@@ -19,7 +19,9 @@ class ComplaintAdmin(admin.ModelAdmin):
 
 
 class OwnerAdmin(admin.ModelAdmin):
-    raw_id_fields = ('flat',)
+    raw_id_fields = ('flats',)
+    search_fields = ('owner',)
+    list_display = ('owner', 'owners_phonenumber', 'owner_pure_phone')
 
 
 admin.site.register(Flat, FlatAdmin)
