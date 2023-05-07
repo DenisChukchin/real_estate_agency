@@ -8,12 +8,13 @@ def link_owners_and_flats(apps, schema_edition):
     Flat = apps.get_model('property', 'Flat')
     Owner = apps.get_model('property', 'Owner')
 
-    for flat in Flat.objects.all():
-        owners = Owner.objects.filter(
+    for flat in Flat.objects.all().iterator():
+        owners = Owner.objects.get_or_create(
             owner=flat.owner,
             owners_phonenumber=flat.owners_phonenumber
         )
-        flat.flats_owner.set(owners)
+        owner_flat = owners[0].flats
+        owner_flat.set([flat])
 
 
 class Migration(migrations.Migration):

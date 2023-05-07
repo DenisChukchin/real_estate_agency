@@ -6,10 +6,11 @@ import phonenumbers
 
 def replace_with_pure_number(apps, schema_edition):
     Flat = apps.get_model('property', 'Flat')
-    for flat in Flat.objects.all():
+    for flat in Flat.objects.all().iterator():
         primary_phone_number = phonenumbers.parse(flat.owners_phonenumber, "RU")
         if phonenumbers.is_valid_number(primary_phone_number):
-            flat.owner_pure_phone = f'+{primary_phone_number.country_code}{primary_phone_number.national_number}'
+            flat.owner_pure_phone = phonenumbers.format_number(
+                primary_phone_number, phonenumbers.PhoneNumberFormat.E164)
             flat.save()
 
 
